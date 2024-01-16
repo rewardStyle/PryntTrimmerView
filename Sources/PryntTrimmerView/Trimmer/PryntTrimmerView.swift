@@ -12,6 +12,10 @@ import UIKit
 public protocol TrimmerViewDelegate: AnyObject {
     func didChangePositionBar(_ playerTime: CMTime)
     func positionBarStoppedMoving(_ playerTime: CMTime)
+    func didDragRightHandleBar(to updatedConstant: CGFloat)
+    func didDragLeftHandleBar(to updatedConstant: CGFloat)
+    func didBeginDraggingRightHandleBar()
+    func didBeginDraggingLeftHandleBar()
 }
 
 /// A view to select a specific time range of a video. It consists of an asset preview with thumbnails inside a scroll view, two
@@ -231,8 +235,10 @@ public protocol TrimmerViewDelegate: AnyObject {
         case .began:
             if isLeftGesture {
                 currentLeftConstraint = leftConstraint!.constant
+                delegate?.didBeginDraggingLeftHandleBar()
             } else {
                 currentRightConstraint = rightConstraint!.constant
+                delegate?.didBeginDraggingRightHandleBar()
             }
             updateSelectedTime(stoppedMoving: false)
         case .changed:
@@ -260,12 +266,14 @@ public protocol TrimmerViewDelegate: AnyObject {
         let maxConstraint = max(rightHandleView.frame.origin.x - handleWidth - minimumDistanceBetweenHandle, 0)
         let newConstraint = min(max(0, currentLeftConstraint + translation.x), maxConstraint)
         leftConstraint?.constant = newConstraint
+        delegate?.didDragLeftHandleBar(to: newConstraint)
     }
 
     private func updateRightConstraint(with translation: CGPoint) {
         let maxConstraint = min(2 * handleWidth - frame.width + leftHandleView.frame.origin.x + minimumDistanceBetweenHandle, 0)
         let newConstraint = max(min(0, currentRightConstraint + translation.x), maxConstraint)
         rightConstraint?.constant = newConstraint
+        delegate?.didDragRightHandleBar(to: newConstraint)
     }
 
     // MARK: - Asset loading
@@ -309,13 +317,18 @@ public protocol TrimmerViewDelegate: AnyObject {
     }
 
     private func updateSelectedTime(stoppedMoving: Bool) {
-        guard let playerTime = positionBarTime else {
-            return
-        }
+        // TODO: Restore this
+//        guard let playerTime = positionBarTime else {
+//            return
+//        }
         if stoppedMoving {
-            delegate?.positionBarStoppedMoving(playerTime)
+           // delegate?.positionBarStoppedMoving(playerTime)
+            // TODO: Restore this
+            delegate?.positionBarStoppedMoving(CMTime(seconds: 30, preferredTimescale: .zero))
         } else {
-            delegate?.didChangePositionBar(playerTime)
+            //delegate?.didChangePositionBar(playerTime)
+            // TODO: Restore this
+            delegate?.didChangePositionBar(CMTime(seconds: 30, preferredTimescale: .zero))
         }
     }
 
