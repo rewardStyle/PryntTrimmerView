@@ -317,18 +317,13 @@ public protocol TrimmerViewDelegate: AnyObject {
     }
 
     private func updateSelectedTime(stoppedMoving: Bool) {
-        // TODO: Restore this
-//        guard let playerTime = positionBarTime else {
-//            return
-//        }
+        guard let playerTime = positionBarTime else {
+            return
+        }
         if stoppedMoving {
-           // delegate?.positionBarStoppedMoving(playerTime)
-            // TODO: Restore this
-            delegate?.positionBarStoppedMoving(CMTime(seconds: 30, preferredTimescale: .zero))
+            delegate?.positionBarStoppedMoving(playerTime)
         } else {
-            //delegate?.didChangePositionBar(playerTime)
-            // TODO: Restore this
-            delegate?.didChangePositionBar(CMTime(seconds: 30, preferredTimescale: .zero))
+            delegate?.didChangePositionBar(playerTime)
         }
     }
 
