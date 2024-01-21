@@ -10,6 +10,8 @@ import AVFoundation
 import UIKit
 
 public protocol TrimmerViewDelegate: AnyObject {
+    func didChangeAsset(asset: AVAsset)
+    func didScrollTrimmer(_ scrollView: UIScrollView)
     func didChangePositionBar(_ playerTime: CMTime)
     func positionBarStoppedMoving(_ playerTime: CMTime)
     func didDragRightHandleBar(to updatedConstant: CGFloat)
@@ -281,6 +283,9 @@ public protocol TrimmerViewDelegate: AnyObject {
     override func assetDidChange(newAsset: AVAsset?) {
         super.assetDidChange(newAsset: newAsset)
         resetHandleViewPosition()
+        if let newAsset = newAsset {
+            delegate?.didChangeAsset(asset: newAsset)
+        }
     }
 
     private func resetHandleViewPosition() {
@@ -349,6 +354,7 @@ public protocol TrimmerViewDelegate: AnyObject {
         }
     }
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        delegate?.didScrollTrimmer(scrollView)
         updateSelectedTime(stoppedMoving: false)
     }
 }
