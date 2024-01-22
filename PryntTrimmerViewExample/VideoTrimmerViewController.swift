@@ -109,22 +109,30 @@ class VideoTrimmerViewController: AssetSelectionViewController {
 }
 
 extension VideoTrimmerViewController: TrimmerViewDelegate {
+    func didChangeAsset(asset: AVAsset) {
+        // Implement as needed
+    }
+    
+    func didScrollTrimmer(_ scrollView: UIScrollView) {
+        // Implement as needed
+    }
+    
 
     func didDragLeftHandleBar(to updatedConstant: CGFloat) {
-        // TODO: Implement as needed
+        // Implement as needed
     }
 
     func didBeginDraggingLeftHandleBar() {
-        // TODO: Implement as needed
+        // Implement as needed
     }
 
 
     func didBeginDraggingRightHandleBar() {
-        // TODO: Implement as needed
+        // Implement as needed
     }
 
     func didDragRightHandleBar(to updatedConstant: CGFloat) {
-        // TODO: Implement as needed
+        // Implement as needed
     }
 
 
