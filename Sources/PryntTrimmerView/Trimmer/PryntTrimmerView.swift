@@ -227,6 +227,11 @@ public protocol TrimmerViewDelegate: AnyObject {
         rightHandleKnob.backgroundColor = handleColor
     }
 
+    public func updateTrimMaskColor(to color: UIColor) {
+        leftMaskView.backgroundColor = color
+        rightMaskView.backgroundColor = color
+    }
+
     // MARK: - Trim Gestures
 
     @objc func handlePanGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
