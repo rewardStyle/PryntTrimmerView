@@ -227,7 +227,7 @@ public protocol TrimmerViewDelegate: AnyObject {
         rightHandleKnob.backgroundColor = handleColor
     }
 
-    public func updateTrimMaskColor(to color: UIColor) {
+    public func updateTrimMaskColor(to color: UIColor?) {
         leftMaskView.backgroundColor = color
         rightMaskView.backgroundColor = color
     }
