@@ -109,6 +109,33 @@ class VideoTrimmerViewController: AssetSelectionViewController {
 }
 
 extension VideoTrimmerViewController: TrimmerViewDelegate {
+    func didChangeAsset(asset: AVAsset) {
+        // Implement as needed
+    }
+    
+    func didScrollTrimmer(_ scrollView: UIScrollView) {
+        // Implement as needed
+    }
+    
+
+    func didDragLeftHandleBar(to updatedConstant: CGFloat) {
+        // Implement as needed
+    }
+
+    func didBeginDraggingLeftHandleBar() {
+        // Implement as needed
+    }
+
+
+    func didBeginDraggingRightHandleBar() {
+        // Implement as needed
+    }
+
+    func didDragRightHandleBar(to updatedConstant: CGFloat) {
+        // Implement as needed
+    }
+
+
     func positionBarStoppedMoving(_ playerTime: CMTime) {
         player?.seek(to: playerTime, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
         player?.play()
