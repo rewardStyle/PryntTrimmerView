@@ -36,6 +36,8 @@ public class ThumbSelectorView: AVAssetTimeSelector {
 
     public weak var delegate: ThumbSelectorViewDelegate?
 
+    /// When `true` the starting frame of the video will be selected upon loading the video asset.
+    public var shouldSelectStartingVideoFrame: Bool = true
     // MARK: - View & constraints configurations
 
     override func setupSubviews() {
@@ -111,7 +113,10 @@ public class ThumbSelectorView: AVAssetTimeSelector {
         if let asset = newAsset {
             setupThumbnailGenerator(with: asset)
             leftThumbConstraint?.constant = 0
-            updateSelectedTime()
+            // Provide some property on the thumb selector to update selected time on asset change.
+            if shouldSelectStartingVideoFrame {
+                updateSelectedTime()
+            }
         }
         super.assetDidChange(newAsset: newAsset)
     }
