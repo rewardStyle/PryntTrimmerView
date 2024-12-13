@@ -46,6 +46,11 @@ public class ThumbSelectorView: AVAssetTimeSelector {
 
     public func clearThumbSelectorViewStartingFrame() {
         thumbView.image = nil
+        thumbBorderColor = .clear
+    }
+
+    public func resetThumbViewBorderColor(to color: UIColor = .white) {
+        thumbBorderColor = color
     }
 
     public func applyCustomThumbSelectorDimmingViewColor(_ color: UIColor) {
