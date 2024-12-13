@@ -36,12 +36,6 @@ public class ThumbSelectorView: AVAssetTimeSelector {
 
     public weak var delegate: ThumbSelectorViewDelegate?
 
-    /// When `true` the starting frame of the video will be selected upon loading the video asset.
-    public var shouldSelectStartingVideoFrame: Bool = true
-
-    /// The custom `UIColor` used for the thumb selector dimming view.
-    public var customThumbSelectorDimmingViewBackgroundColor: UIColor?
-
     // MARK: - View & constraints configurations
 
     override func setupSubviews() {
@@ -50,11 +44,19 @@ public class ThumbSelectorView: AVAssetTimeSelector {
         setupThumbView()
     }
 
+    public func clearThumbSelectorViewStartingFrame() {
+        thumbView.image = nil
+    }
+
+    public func applyCustomThumbSelectorDimmingViewColor(_ color: UIColor) {
+        dimmingView.backgroundColor = color
+    }
+
     private func setupDimmingView() {
 
         dimmingView.translatesAutoresizingMaskIntoConstraints = false
         dimmingView.isUserInteractionEnabled = false
-        dimmingView.backgroundColor = customThumbSelectorDimmingViewBackgroundColor ?? UIColor.white.withAlphaComponent(0.7)
+        dimmingView.backgroundColor = UIColor.white.withAlphaComponent(0.7)
         addSubview(dimmingView)
         dimmingView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
         dimmingView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
@@ -118,9 +120,7 @@ public class ThumbSelectorView: AVAssetTimeSelector {
             setupThumbnailGenerator(with: asset)
             leftThumbConstraint?.constant = 0
             // Provide some property on the thumb selector to update selected time on asset change.
-            if shouldSelectStartingVideoFrame {
-                updateSelectedTime()
-            }
+            updateSelectedTime()
         }
         super.assetDidChange(newAsset: newAsset)
     }
