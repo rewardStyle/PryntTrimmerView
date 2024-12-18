@@ -129,7 +129,6 @@ public class ThumbSelectorView: AVAssetTimeSelector {
         if let asset = newAsset {
             setupThumbnailGenerator(with: asset)
             leftThumbConstraint?.constant = 0
-            // Provide some property on the thumb selector to update selected time on asset change.
             updateSelectedTime()
         }
         super.assetDidChange(newAsset: newAsset)
