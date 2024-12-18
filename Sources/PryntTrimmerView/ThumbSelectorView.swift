@@ -36,6 +36,8 @@ public class ThumbSelectorView: AVAssetTimeSelector {
 
     public weak var delegate: ThumbSelectorViewDelegate?
 
+    private(set) var thumbViewWidthConstraint: NSLayoutConstraint?
+
     // MARK: - View & constraints configurations
 
     override func setupSubviews() {
@@ -81,10 +83,12 @@ public class ThumbSelectorView: AVAssetTimeSelector {
 
         leftThumbConstraint = thumbView.leftAnchor.constraint(equalTo: leftAnchor)
         leftThumbConstraint?.isActive = true
-        thumbView.widthAnchor.constraint(equalTo: thumbView.heightAnchor).isActive = true
+        thumbViewWidthConstraint = thumbView.widthAnchor.constraint(equalTo: thumbView.heightAnchor)
+        thumbViewWidthConstraint?.isActive = true
         thumbView.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
         thumbView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
 
+        assetPreview.assetVideoDelegate = self
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(ThumbSelectorView.handlePanGesture(_:)))
         thumbView.addGestureRecognizer(panGestureRecognizer)
     }
@@ -188,5 +192,16 @@ public class ThumbSelectorView: AVAssetTimeSelector {
 
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updateSelectedTime()
+    }
+}
+
+// MARK: - AssetVideoScrollViewDelegate Conformance
+
+extension ThumbSelectorView: AssetVideoScrollViewDelegate {
+
+    func didUpdateThumbnails(to size: CGSize, for asset: AVAsset) {
+        thumbViewWidthConstraint?.isActive = false
+        thumbViewWidthConstraint = thumbView.widthAnchor.constraint(equalToConstant: size.width)
+        thumbViewWidthConstraint?.isActive = true
     }
 }
