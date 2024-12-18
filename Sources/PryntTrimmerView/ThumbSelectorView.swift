@@ -200,8 +200,10 @@ public class ThumbSelectorView: AVAssetTimeSelector {
 extension ThumbSelectorView: AssetVideoScrollViewDelegate {
 
     func didUpdateThumbnails(to size: CGSize, for asset: AVAsset) {
-        thumbViewWidthConstraint?.isActive = false
-        thumbViewWidthConstraint = thumbView.widthAnchor.constraint(equalToConstant: size.width)
-        thumbViewWidthConstraint?.isActive = true
+        if size.width < size.height {
+            thumbViewWidthConstraint?.isActive = false
+            thumbViewWidthConstraint = thumbView.widthAnchor.constraint(equalToConstant: size.width)
+            thumbViewWidthConstraint?.isActive = true
+        }
     }
 }
