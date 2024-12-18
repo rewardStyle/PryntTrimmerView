@@ -75,6 +75,7 @@ public class ThumbSelectorView: AVAssetTimeSelector {
 
         thumbView.translatesAutoresizingMaskIntoConstraints = false
         thumbView.layer.borderWidth = 2.0
+        thumbView.layer.cornerRadius = 4.0
         thumbView.layer.borderColor = thumbBorderColor.cgColor
         thumbView.isUserInteractionEnabled = true
         thumbView.contentMode = .scaleAspectFill
