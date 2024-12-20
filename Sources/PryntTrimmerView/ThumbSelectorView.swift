@@ -45,15 +45,13 @@ public class ThumbSelectorView: AVAssetTimeSelector {
         setupDimmingView()
         setupThumbView()
         thumbSelectorTrackTappedHandler = { [weak self] location in
-            guard let self = self,
-                  let time = self.getTime(from: location.x) else {
-                return
-            }
+            guard let self = self else  { return }
             self.disableGestureRecognizers()
             self.resetThumbViewBorderColor()
-            self.generateThumbnailImage(for: time)
             let width = self.thumbView.frame.size.width / 2
             self.leftThumbConstraint?.constant = location.x - width
+            self.layoutIfNeeded()
+            self.updateSelectedTime()
         }
     }
 
