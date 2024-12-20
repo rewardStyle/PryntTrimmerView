@@ -58,6 +58,8 @@ public class AVAssetTimeSelector: UIView, UIScrollViewDelegate {
     func configureGestureRecognizers() {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(singleTap(_:)))
         let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longTap(_ :)))
+        tapGestureRecognizer.isEnabled = false
+        longPressGestureRecognizer.isEnabled = false
         longPressGestureRecognizer.minimumPressDuration = 0.1
         addGestureRecognizer(tapGestureRecognizer)
         addGestureRecognizer(longPressGestureRecognizer)
