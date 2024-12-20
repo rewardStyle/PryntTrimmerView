@@ -36,12 +36,39 @@ public class ThumbSelectorView: AVAssetTimeSelector {
 
     public weak var delegate: ThumbSelectorViewDelegate?
 
+    private(set) var thumbViewWidthConstraint: NSLayoutConstraint?
+
     // MARK: - View & constraints configurations
 
     override func setupSubviews() {
         super.setupSubviews()
         setupDimmingView()
         setupThumbView()
+        thumbSelectorTrackTappedHandler = { [weak self] location in
+            guard let self = self else  { return }
+            self.disableGestureRecognizers()
+            self.resetThumbViewBorderColor()
+            let width = self.thumbView.frame.size.width / 2
+            self.leftThumbConstraint?.constant = location.x - width
+            self.layoutIfNeeded()
+            self.updateSelectedTime()
+        }
+    }
+    /// Clears the thumb view image and sets the thumb border color to clear. This also has a side effect of enabling
+    /// gesture recognizers that will listen for taps on the cover selector to enable cover selection again if a user taps
+    /// anywhere in the view.
+    public func clearThumbSelectorViewStartingFrame() {
+        enableGestureRecognizers()
+        thumbView.image = nil
+        thumbBorderColor = .clear
+    }
+
+    public func resetThumbViewBorderColor(to color: UIColor = .white) {
+        thumbBorderColor = color
+    }
+
+    public func applyCustomThumbSelectorDimmingViewColor(_ color: UIColor) {
+        dimmingView.backgroundColor = color
     }
 
     private func setupDimmingView() {
@@ -60,6 +87,7 @@ public class ThumbSelectorView: AVAssetTimeSelector {
 
         thumbView.translatesAutoresizingMaskIntoConstraints = false
         thumbView.layer.borderWidth = 2.0
+        thumbView.layer.cornerRadius = 4.0
         thumbView.layer.borderColor = thumbBorderColor.cgColor
         thumbView.isUserInteractionEnabled = true
         thumbView.contentMode = .scaleAspectFill
@@ -68,10 +96,12 @@ public class ThumbSelectorView: AVAssetTimeSelector {
 
         leftThumbConstraint = thumbView.leftAnchor.constraint(equalTo: leftAnchor)
         leftThumbConstraint?.isActive = true
-        thumbView.widthAnchor.constraint(equalTo: thumbView.heightAnchor).isActive = true
+        thumbViewWidthConstraint = thumbView.widthAnchor.constraint(equalTo: thumbView.heightAnchor)
+        thumbViewWidthConstraint?.isActive = true
         thumbView.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
         thumbView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
 
+        assetPreview.assetVideoDelegate = self
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(ThumbSelectorView.handlePanGesture(_:)))
         thumbView.addGestureRecognizer(panGestureRecognizer)
     }
@@ -174,5 +204,20 @@ public class ThumbSelectorView: AVAssetTimeSelector {
 
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updateSelectedTime()
+    }
+}
+
+// MARK: - AssetVideoScrollViewDelegate Conformance
+
+extension ThumbSelectorView: AssetVideoScrollViewDelegate {
+
+    func didUpdateThumbnails(to size: CGSize, for asset: AVAsset) {
+        thumbViewWidthConstraint?.isActive = false
+        if size.width < size.height {
+            thumbViewWidthConstraint = thumbView.widthAnchor.constraint(equalToConstant: size.width)
+        } else {
+            thumbViewWidthConstraint = thumbView.widthAnchor.constraint(equalTo: thumbView.heightAnchor)
+        }
+        thumbViewWidthConstraint?.isActive = true
     }
 }

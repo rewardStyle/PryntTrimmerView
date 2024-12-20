@@ -9,6 +9,10 @@
 import AVFoundation
 import UIKit
 
+protocol AssetVideoScrollViewDelegate: AnyObject {
+    func didUpdateThumbnails(to size: CGSize, for asset: AVAsset)
+}
+
 class AssetVideoScrollView: UIScrollView {
 
     private var widthConstraint: NSLayoutConstraint?
@@ -16,6 +20,8 @@ class AssetVideoScrollView: UIScrollView {
     let contentView = UIView()
     public var maxDuration: Double = 15
     private var generator: AVAssetImageGenerator?
+
+    weak var assetVideoDelegate: AssetVideoScrollViewDelegate?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -56,7 +62,7 @@ class AssetVideoScrollView: UIScrollView {
             print("Could not calculate the thumbnail size.")
             return
         }
-
+        assetVideoDelegate?.didUpdateThumbnails(to: thumbnailSize, for: asset)
         generator?.cancelAllCGImageGeneration()
         removeFormerThumbnails()
         let newContentSize = setContentSize(for: asset)
