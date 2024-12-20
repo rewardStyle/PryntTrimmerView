@@ -54,7 +54,9 @@ public class ThumbSelectorView: AVAssetTimeSelector {
             self.updateSelectedTime()
         }
     }
-
+    /// Clears the thumb view image and sets the thumb border color to clear. This also has a side effect of enabling
+    /// gesture recognizers that will listen for taps on the cover selector to enable cover selection again if a user taps
+    /// anywhere in the view.
     public func clearThumbSelectorViewStartingFrame() {
         enableGestureRecognizers()
         thumbView.image = nil
