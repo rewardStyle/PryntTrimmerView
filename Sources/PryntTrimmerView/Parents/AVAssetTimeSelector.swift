@@ -26,6 +26,12 @@ public class AVAssetTimeSelector: UIView, UIScrollViewDelegate {
         }
     }
 
+    var tapGestureRecognizer: UIGestureRecognizer?
+
+    var longPressGestureRecognizer: UIGestureRecognizer?
+
+    var thumbSelectorTrackTappedHandler: ((CGPoint) -> Void)?
+
     /// The asset to be displayed in the underlying scroll view. Setting a new asset will automatically refresh the thumbnails.
     public var asset: AVAsset? {
         didSet {
@@ -46,6 +52,39 @@ public class AVAssetTimeSelector: UIView, UIScrollViewDelegate {
     func setupSubviews() {
         setupAssetPreview()
         constrainAssetPreview()
+        configureGestureRecognizers()
+    }
+
+    func configureGestureRecognizers() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(singleTap(_:)))
+        let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longTap(_ :)))
+        longPressGestureRecognizer.minimumPressDuration = 0.1
+        addGestureRecognizer(tapGestureRecognizer)
+        addGestureRecognizer(longPressGestureRecognizer)
+        self.tapGestureRecognizer = tapGestureRecognizer
+        self.longPressGestureRecognizer = longPressGestureRecognizer
+    }
+
+    func enableGestureRecognizers() {
+        self.tapGestureRecognizer?.isEnabled = true
+        self.longPressGestureRecognizer?.isEnabled = true
+    }
+
+    func disableGestureRecognizers() {
+        self.tapGestureRecognizer?.isEnabled = false
+        self.longPressGestureRecognizer?.isEnabled = false
+    }
+
+    @objc
+    func longTap(_ recognizer: UILongPressGestureRecognizer) {
+        let location = recognizer.location(in: self)
+        thumbSelectorTrackTappedHandler?(location)
+    }
+
+    @objc
+    func singleTap(_ recognizer: UITapGestureRecognizer) {
+        let location = recognizer.location(in: self)
+        thumbSelectorTrackTappedHandler?(location)
     }
 
     public func regenerateThumbnails() {
