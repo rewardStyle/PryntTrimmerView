@@ -35,6 +35,7 @@ public class ThumbSelectorView: AVAssetTimeSelector {
     private var generator: AVAssetImageGenerator?
 
     public weak var delegate: ThumbSelectorViewDelegate?
+    public var shouldUpdatePreviewSize = true
 
     private(set) var thumbViewWidthConstraint: NSLayoutConstraint?
 
@@ -212,12 +213,14 @@ public class ThumbSelectorView: AVAssetTimeSelector {
 extension ThumbSelectorView: AssetVideoScrollViewDelegate {
 
     func didUpdateThumbnails(to size: CGSize, for asset: AVAsset) {
-        thumbViewWidthConstraint?.isActive = false
-        if size.width < size.height {
-            thumbViewWidthConstraint = thumbView.widthAnchor.constraint(equalToConstant: size.width)
-        } else {
-            thumbViewWidthConstraint = thumbView.widthAnchor.constraint(equalTo: thumbView.heightAnchor)
+        if shouldUpdatePreviewSize {
+            thumbViewWidthConstraint?.isActive = false
+            if size.width < size.height {
+                thumbViewWidthConstraint = thumbView.widthAnchor.constraint(equalToConstant: size.width)
+            } else {
+                thumbViewWidthConstraint = thumbView.widthAnchor.constraint(equalTo: thumbView.heightAnchor)
+            }
+            thumbViewWidthConstraint?.isActive = true
         }
-        thumbViewWidthConstraint?.isActive = true
     }
 }
